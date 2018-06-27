@@ -39,7 +39,7 @@ namespace PhotonTutorial {
 
 		void Start() {
 			CameraWork cameraWork = GetComponent<CameraWork>();
-			if (photonView.isMine) {
+			if (photonView.isMine || !PhotonNetwork.connected) {
 				cameraWork.OnStartFollowing();
 			}
 
@@ -60,7 +60,7 @@ namespace PhotonTutorial {
 				beams.SetActive(isFiring);
 			}
 
-			if (health <= 0f) {
+			if (health <= 0f && PhotonNetwork.connected) {
 				GameManager.Instance.LeaveRoom();
 			}
 		}
@@ -79,24 +79,26 @@ namespace PhotonTutorial {
 			}
 		}
 
-		void OnTriggerEnter(Collider other) {
+		bool CanTakeDamage(Collider other) {
 			if (!photonView.isMine && PhotonNetwork.connected)
-				return;
+				return false;
 
-			if (!other.name.Contains("Beam"))
-				return;
+			if (!other.name.Contains("Beam") || other.transform.parent == beams.transform)
+				return false;
 
-			health -= 0.1f;
+			return true;
+		}
+
+		void OnTriggerEnter(Collider other) {
+			if (CanTakeDamage(other)) {
+				health -= 0.1f;
+			}
 		}
 
 		void OnTriggerStay(Collider other) {
-			if (!photonView.isMine && PhotonNetwork.connected)
-				return;
-
-			if (!other.name.Contains("Beam"))
-				return;
-
-			health -= 0.1f * Time.deltaTime;
+			if (CanTakeDamage(other)) {
+				health -= 0.1f * Time.deltaTime;
+			}
 		}
 
 		public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
