@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,7 +16,9 @@ namespace PhotonTutorial {
 			instance = this;
 
 			if (LocalPlayer == null) {
-				PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+				float x = Random.Range(-20, 20);
+				float z = Random.Range(-20, 20);
+				PhotonNetwork.Instantiate(playerPrefab.name, new Vector3(x, 0.5f, z), Quaternion.identity, 0);
 			}
 		}
 
@@ -38,17 +39,18 @@ namespace PhotonTutorial {
 			}
 
 			Debug.LogFormat("PhotonNetwork: Loading Level: {0}", PhotonNetwork.room.PlayerCount);
-			PhotonNetwork.LoadLevel("Room For " + PhotonNetwork.room.PlayerCount);
+			// PhotonNetwork.LoadLevel("Room For " + PhotonNetwork.room.PlayerCount);
+			PhotonNetwork.LoadLevel("Room For 4");
 		}
 
 		public override void OnPhotonPlayerConnected(PhotonPlayer newPlayer) {
 			Debug.LogFormat("OnPhotonPlayerConnected() {0}", newPlayer.NickName);
 
-			if (PhotonNetwork.isMasterClient) {
-				Debug.LogFormat("OnPhotonPlayerConnected isMasterClient " + PhotonNetwork.isMasterClient);
+			// if (PhotonNetwork.isMasterClient) {
+			// 	Debug.LogFormat("OnPhotonPlayerConnected isMasterClient " + PhotonNetwork.isMasterClient);
 
-				LoadArena();
-			}
+			// 	LoadArena();
+			// }
 		}
 
 		public override void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer) {
@@ -57,7 +59,7 @@ namespace PhotonTutorial {
 			if (PhotonNetwork.isMasterClient) {
 				Debug.Log("OnPhotonPlayerDisconnected isMasterClient " + PhotonNetwork.isMasterClient);
 
-				LoadArena();
+				// LoadArena();
 			}
 		}
 	}

@@ -44,9 +44,11 @@ namespace PhotonTutorial {
 			Debug.Log("OnJoinedRoom was called by PUN");
 
 			if (PhotonNetwork.room.PlayerCount == 1) {
-				Debug.Log("We load the 'Room For 1'");
+				// Debug.Log("We load the 'Room For 1'");
+				// PhotonNetwork.LoadLevel("Room For 1");
 
-				PhotonNetwork.LoadLevel("Room For 1");
+				Debug.Log("We load the 'Room For 4'");
+				PhotonNetwork.LoadLevel("Room For 4");
 			}
 		}
 

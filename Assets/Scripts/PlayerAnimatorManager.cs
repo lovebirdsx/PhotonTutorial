@@ -21,13 +21,16 @@ namespace PhotonTutorial {
 		void UpdateMove() {
 			float h = Input.GetAxis("Horizontal");
 			float v = Input.GetAxis("Vertical");
-			Vector3 direction = new Vector3(h, 0, v);
-			direction.Normalize();
-			Vector3 targetPosition = transform.position + direction * moveSpeed * Time.deltaTime;
-			transform.LookAt(targetPosition);
-			transform.position += direction * moveSpeed * Time.deltaTime;
-
-			animator.SetFloat("Speed", h * h + v * v);
+			if (h * h + v * v > 0.01f) {
+				Vector3 direction = new Vector3(h, 0, v);
+				direction.Normalize();
+				Vector3 targetPosition = transform.position + direction * moveSpeed * Time.deltaTime;
+				transform.LookAt(targetPosition);
+				transform.position += direction * moveSpeed * Time.deltaTime;
+				animator.SetFloat("Speed", moveSpeed);
+			} else {
+				animator.SetFloat("Speed", 0f);
+			}
 		}
 
 		void UpdateMoveByAnimation() {
